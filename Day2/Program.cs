@@ -16,25 +16,25 @@ namespace Day2
                 var positions = line.Split(',');
                 
                 // overide start values
-                positions[1] = "12";
-                positions[2] = "2";
+                //positions[1] = "12";
+                //positions[2] = "2";
 
 
-                for (int i = 0; i < positions.Length; i = i + 4)
+                for (int instructionPointer = 0; instructionPointer < positions.Length; instructionPointer += 4)
                 {
-                    int opcode = int.Parse(positions[i]);
-                    int value1 = int.Parse(positions[int.Parse(positions[i + 1])]);
-                    int value2 = int.Parse(positions[int.Parse(positions[i + 2])]);
-                    int storeAddress = int.Parse(positions[i + 3]);
+                    int opcode = int.Parse(positions[instructionPointer]);
+                    int noun = int.Parse(positions[int.Parse(positions[instructionPointer + 1])]);
+                    int verb = int.Parse(positions[int.Parse(positions[instructionPointer + 2])]);
+                    int storeAddress = int.Parse(positions[instructionPointer + 3]);
                     switch (opcode)
                     {
                         case 1:
                             //add
-                            positions[storeAddress] = (value1 + value2).ToString();
+                            positions[storeAddress] = (noun + verb).ToString();
                             break;
                         case 2:
                             //multiply
-                            positions[storeAddress] = (value1 * value2).ToString();
+                            positions[storeAddress] = (noun * verb).ToString();
                             break;
                         case 99:
                             //print and halt
@@ -42,6 +42,10 @@ namespace Day2
                             Console.ReadKey();
                             break;
                         default:
+                            int value = (100 * noun + verb);
+                            if (value == 19690720)
+                                Console.WriteLine();
+                            positions[storeAddress] = (100 * noun + verb).ToString();
                             break;
                     }
 
