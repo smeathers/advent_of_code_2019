@@ -1,8 +1,6 @@
 ﻿using System;
 
-//https://adventofcode.com/2019/day/2
-
-namespace Day2
+namespace Day1
 {
     class Program
     {
