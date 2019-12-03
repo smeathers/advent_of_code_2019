@@ -5,6 +5,21 @@ using System.Linq;
 
 namespace Day3
 {
+
+    public class location
+    {
+        public int ?X;
+        public int ?Y;
+        public int ?Distance;
+
+        public location(int ?x = null, int ?y = null, int ?distance = null)
+        {
+            X = x;
+            Y = y;
+            Distance = distance;
+        }
+
+    }
     class Program
     {
 
@@ -29,14 +44,11 @@ namespace Day3
 
         }
 
-        static List<string> Plot(string line)
+        static List<location> Plot(string line)
         {
-            //List<longLat> path = new List<longLat>();
-            List<string> path = new List<string>();
-            //longLat Location = new longLat();
-            //Location.x = 0;
-            //Location.y = 0;
-            path.Add("0,0");
+            List<location> path = new List<location>();
+            path.Add(new location(0,0,0));
+            
 
             foreach (var instruction in line.Split(','))
             {
@@ -45,40 +57,51 @@ namespace Day3
 
                 for (int i = 1; i <= Distnace; i++)
                 {
+                    location loc = new location();
                     switch (Direction)
                     {
                         case "R":
                             // x-
-                            path.Add((int.Parse(path.Last().Split(',')[0]) - 1).ToString() + "," + path.Last().Split(',')[1]);
+                            loc.X = path.Last().X - 1;
+                            loc.Y = path.Last().Y;
+                            loc.Distance = path.Last().Distance +1;;
                             break;
                         case "L":
                             // x+
-                            path.Add((int.Parse(path.Last().Split(',')[0]) + 1).ToString() + "," + path.Last().Split(',')[1]);
+                            loc.X = path.Last().X + 1;
+                            loc.Y = path.Last().Y;
+                            loc.Distance = path.Last().Distance +1;;
                             break;
                         case "U":
                             // y+
-                            path.Add((path.Last().Split(',')[0]) + "," + (int.Parse(path.Last().Split(',')[1]) + 1).ToString());
+                            loc.X = path.Last().X;
+                            loc.Y = path.Last().Y + 1;
+                            loc.Distance = path.Last().Distance +1;;
                             break;
                         case "D":
                             // y-
-                            path.Add((path.Last().Split(',')[0]) + "," + (int.Parse(path.Last().Split(',')[1]) - 1).ToString());
+                            loc.X = path.Last().X;
+                            loc.Y = path.Last().Y - 1;
+                            loc.Distance = path.Last().Distance +1;;
                             break;
                         default:
                             break;
                     }
-                    //path.Add(loc);
+                    path.Add(loc);
                 }
             }
 
             return path;
         }
 
-        static List<string> Trace(string line, List<string> firstPath)
+        static List<location> Trace(string line, List<location> firstPath)
         {
-            List<string> path = new List<string>();
-            path.Add("0,0");
+            List<location> path = new List<location>();
+            path.Add(new location(0,0,0));
             int x = 0, y = 0;
-            int ?DistanceFromOrigin = null;
+            int? DistanceFromOrigin = null;
+            int? CombinedDistance = null;
+            
 
             foreach (var instruction in line.Split(','))
             {
@@ -87,43 +110,57 @@ namespace Day3
 
                 for (int i = 1; i <= Distnace; i++)
                 {
+                    location loc = new location();
                     switch (Direction)
                     {
                         case "R":
                             // x-
-                            x--;
-                            //path.Add((int.Parse(path.Last().Split(',')[0]) - 1).ToString() + "," + path.Last().Split(',')[1]);
+                            loc.X = path.Last().X - 1;
+                            loc.Y = path.Last().Y;
+                            loc.Distance = path.Last().Distance +1;
                             break;
                         case "L":
                             // x+
-                            x++;
-                            //path.Add((int.Parse(path.Last().Split(',')[0]) + 1).ToString() + "," + path.Last().Split(',')[1]);
+                            loc.X = path.Last().X + 1;
+                            loc.Y = path.Last().Y;
+                            loc.Distance = path.Last().Distance +1;;
                             break;
                         case "U":
                             // y+
-                            y++;
-                            //path.Add((path.Last().Split(',')[0]) + "," + (int.Parse(path.Last().Split(',')[1]) + 1).ToString());
+                            loc.X = path.Last().X;
+                            loc.Y = path.Last().Y + 1;
+                            loc.Distance = path.Last().Distance +1;;
                             break;
                         case "D":
                             // y-
-                            y--;
-                            //path.Add((path.Last().Split(',')[0]) + "," + (int.Parse(path.Last().Split(',')[1]) - 1).ToString());
+                            loc.X = path.Last().X;
+                            loc.Y = path.Last().Y - 1;
+                            loc.Distance = path.Last().Distance +1;;
                             break;
                         default:
                             break;
                     }
-                    //path.Add(loc);
-                    foreach (string location in firstPath)
+                    path.Add(loc);
+                    foreach (var firstLoc in firstPath)
                     {
-                        if (location == x.ToString() + "," + y.ToString())
+                        if (loc.X == firstLoc.X && loc.Y == firstLoc.Y)
                         {
-                            int dist = System.Math.Abs(x) + System.Math.Abs(y);
+                            int dist = System.Math.Abs(loc.X ?? default(int)) + System.Math.Abs(loc.Y ?? default(int));
+                            int? combiDist = loc.Distance + firstLoc.Distance;
+
                             if (dist < DistanceFromOrigin || DistanceFromOrigin is null)
                             {
-                                Console.WriteLine(location + " : " + dist);
+                                Console.WriteLine(loc.X.ToString() + "," + loc.Y.ToString() + " OD: " + dist);
                                 DistanceFromOrigin = dist;
                             }
+                            if (combiDist < CombinedDistance || CombinedDistance is null)
+                            {
+                                Console.WriteLine(loc.X.ToString() + "," + loc.Y.ToString() + " TD: " + combiDist);
+                                CombinedDistance = combiDist;
+                            }
+
                         }
+                        //}
                     }
                 }
             }
