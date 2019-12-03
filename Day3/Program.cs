@@ -6,13 +6,13 @@ using System.Linq;
 namespace Day3
 {
 
-    public class location
+    public class Location
     {
         public int ?X;
         public int ?Y;
         public int ?Distance;
 
-        public location(int ?x = null, int ?y = null, int ?distance = null)
+        public Location(int ?x = null, int ?y = null, int ?distance = null)
         {
             X = x;
             Y = y;
@@ -30,7 +30,7 @@ namespace Day3
             var lines = File.ReadAllLines("input.txt");
 
             var firstPath = Plot(lines[0]);
-            var secondPath = Trace(lines[1], firstPath);
+            Trace(lines[1], firstPath);
 
 
 
@@ -44,10 +44,11 @@ namespace Day3
 
         }
 
-        static List<location> Plot(string line)
+        static List<Location> Plot(string line)
         {
-            List<location> path = new List<location>();
-            path.Add(new location(0,0,0));
+            List<Location> list = new List<Location>();
+            List<Location> path = list;
+            path.Add(new Location(0,0,0));
             
 
             foreach (var instruction in line.Split(','))
@@ -57,7 +58,7 @@ namespace Day3
 
                 for (int i = 1; i <= Distnace; i++)
                 {
-                    location loc = new location();
+                    Location loc = new Location();
                     switch (Direction)
                     {
                         case "R":
@@ -94,11 +95,11 @@ namespace Day3
             return path;
         }
 
-        static List<location> Trace(string line, List<location> firstPath)
+        static List<Location> Trace(string line, List<Location> firstPath)
         {
-            List<location> path = new List<location>();
-            path.Add(new location(0,0,0));
-            int x = 0, y = 0;
+            List<Location> list = new List<Location>();
+            List<Location> path = list;
+            path.Add(new Location(0,0,0));
             int? DistanceFromOrigin = null;
             int? CombinedDistance = null;
             
@@ -110,7 +111,7 @@ namespace Day3
 
                 for (int i = 1; i <= Distnace; i++)
                 {
-                    location loc = new location();
+                    Location loc = new Location();
                     switch (Direction)
                     {
                         case "R":
@@ -145,7 +146,7 @@ namespace Day3
                     {
                         if (loc.X == firstLoc.X && loc.Y == firstLoc.Y)
                         {
-                            int dist = System.Math.Abs(loc.X ?? default(int)) + System.Math.Abs(loc.Y ?? default(int));
+                            int dist = System.Math.Abs(loc.X ?? default) + System.Math.Abs(loc.Y ?? default);
                             int? combiDist = loc.Distance + firstLoc.Distance;
 
                             if (dist < DistanceFromOrigin || DistanceFromOrigin is null)
