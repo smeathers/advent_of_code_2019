@@ -8,33 +8,15 @@ namespace Day3
     class Program
     {
 
-        struct longLat
-        {
-            public int x;
-            public int y;
-        }
-        
-
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
 
             var lines = File.ReadAllLines("input.txt");
 
-            
-            //List<int[2]> path2 = new List<int[2]>();
-            //longLat Location = new longLat();
-            //Location.x = 0;
-            //Location.y = 0;
-            //path.Add(Location);
-
             var firstPath = Plot(lines[0]);
-            Trace(lines[1], firstPath);
+            var secondPath = Trace(lines[1], firstPath);
 
-            foreach (var line in lines)
-            {
-                
-            }
 
 
     //plot
@@ -47,20 +29,19 @@ namespace Day3
 
         }
 
-        static List<longLat> Plot(string line)
+        static List<string> Plot(string line)
         {
             //List<longLat> path = new List<longLat>();
-            List<longLat> path = new List<longLat>();
-            longLat Location = new longLat();
-            Location.x = 0;
-            Location.y = 0;
-            path.Add(Location);
+            List<string> path = new List<string>();
+            //longLat Location = new longLat();
+            //Location.x = 0;
+            //Location.y = 0;
+            path.Add("0,0");
 
             foreach (var instruction in line.Split(','))
             {
                 string Direction = instruction.Substring(0, 1);
                 int Distnace = int.Parse(instruction.Substring(1));
-                longLat loc = new longLat();
 
                 for (int i = 1; i <= Distnace; i++)
                 {
@@ -68,47 +49,41 @@ namespace Day3
                     {
                         case "R":
                             // x-
-                            loc.x = path.Last().x - 1;
-                            loc.y = path.Last().y;
+                            path.Add((int.Parse(path.Last().Split(',')[0]) - 1).ToString() + "," + path.Last().Split(',')[1]);
                             break;
                         case "L":
                             // x+
-                            loc.x = path.Last().x + 1;
-                            loc.y = path.Last().y;
+                            path.Add((int.Parse(path.Last().Split(',')[0]) + 1).ToString() + "," + path.Last().Split(',')[1]);
                             break;
                         case "U":
                             // y+
-                            loc.x = path.Last().x;
-                            loc.y = path.Last().y + 1;
+                            path.Add((path.Last().Split(',')[0]) + "," + (int.Parse(path.Last().Split(',')[1]) + 1).ToString());
                             break;
                         case "D":
                             // y-
-                            loc.x = path.Last().x;
-                            loc.y = path.Last().y - 1;
+                            path.Add((path.Last().Split(',')[0]) + "," + (int.Parse(path.Last().Split(',')[1]) - 1).ToString());
                             break;
                         default:
                             break;
                     }
-                    path.Add(loc);
+                    //path.Add(loc);
                 }
             }
 
             return path;
         }
 
-        static List<longLat> Trace(string line, List<longLat> firstPath)
+        static List<string> Trace(string line, List<string> firstPath)
         {
-            List<longLat> path = new List<longLat>();
-            longLat Location = new longLat();
-            Location.x = 0;
-            Location.y = 0;
-            path.Add(Location);
+            List<string> path = new List<string>();
+            path.Add("0,0");
+            int x = 0, y = 0;
+            int ?DistanceFromOrigin = null;
 
             foreach (var instruction in line.Split(','))
             {
                 string Direction = instruction.Substring(0, 1);
                 int Distnace = int.Parse(instruction.Substring(1));
-                longLat loc = new longLat();
 
                 for (int i = 1; i <= Distnace; i++)
                 {
@@ -116,31 +91,40 @@ namespace Day3
                     {
                         case "R":
                             // x-
-                            loc.x = path.Last().x - 1;
-                            loc.y = path.Last().y;
+                            x--;
+                            //path.Add((int.Parse(path.Last().Split(',')[0]) - 1).ToString() + "," + path.Last().Split(',')[1]);
                             break;
                         case "L":
                             // x+
-                            loc.x = path.Last().x + 1;
-                            loc.y = path.Last().y;
+                            x++;
+                            //path.Add((int.Parse(path.Last().Split(',')[0]) + 1).ToString() + "," + path.Last().Split(',')[1]);
                             break;
                         case "U":
                             // y+
-                            loc.x = path.Last().x;
-                            loc.y = path.Last().y + 1;
+                            y++;
+                            //path.Add((path.Last().Split(',')[0]) + "," + (int.Parse(path.Last().Split(',')[1]) + 1).ToString());
                             break;
                         case "D":
                             // y-
-                            loc.x = path.Last().x;
-                            loc.y = path.Last().y - 1;
+                            y--;
+                            //path.Add((path.Last().Split(',')[0]) + "," + (int.Parse(path.Last().Split(',')[1]) - 1).ToString());
                             break;
                         default:
                             break;
                     }
-                    path.Add(loc);
-                    int count = firstPath.BinarySearch(loc);
-                    if (count > 0)
-                        Console.WriteLine();
+                    //path.Add(loc);
+                    foreach (string location in firstPath)
+                    {
+                        if (location == x.ToString() + "," + y.ToString())
+                        {
+                            int dist = System.Math.Abs(x) + System.Math.Abs(y);
+                            if (dist < DistanceFromOrigin || DistanceFromOrigin is null)
+                            {
+                                Console.WriteLine(location + " : " + dist);
+                                DistanceFromOrigin = dist;
+                            }
+                        }
+                    }
                 }
             }
             return path;
