@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 // input = 347312-805915
 // part1 = 594
@@ -21,7 +24,7 @@ namespace Day4
                 //Console.WriteLine(input);
                 if (DecreaseCheck(input))
                 {
-                    Console.WriteLine("     " + input);
+                    Console.WriteLine(input);
                     passwordCount++;
                 }
                 //input.ToString().
@@ -31,32 +34,49 @@ namespace Day4
 
         static bool DecreaseCheck(int input)
         {
-            int? previous = null;
+            //int? previous = null;
             bool doubleCheck = false;
+            List<int> previous = new List<int>();
+            //List<int> previous;
 
             foreach (char number in input.ToString().ToCharArray())
             {
-                if (previous == null)
-                    previous = int.Parse(number.ToString());
-                else 
+                //previous.Add(number);
+
+
+                if (previous.Count == 0)
+                    previous.Add(int.Parse(number.ToString()));
+                else
                 {
-                    if (int.Parse(number.ToString()) >= previous)
+                    if (int.Parse(number.ToString()) >= previous.Last())
                     {
-                        if (previous == int.Parse(number.ToString()))
+
+                        //Console.WriteLine();
+
+
+
+                        if (previous.Last() == int.Parse(number.ToString()))
                         {
                             doubleCheck = true;
                         }
-                            
-                        previous = int.Parse(number.ToString());
+
+                        previous.Add(int.Parse(number.ToString()));
                     }
                     else
                         return false;
                 }
 
-
             }
-            return doubleCheck;
+            if (doubleCheck)
+            {
+                if (Regex.Matches(input.ToString(), @"^(?=[0-9]{6}$)(?=(?:.*([0-9])(?!\1))?([0-9])\2(?!\2))(?:0|1(?!0)|2(?![01])|3(?![0-2])|4(?![0-3])|5(?![0-4])|6(?![0-5])|7(?![0-6])|8(?![0-7])|9(?![0-8]))+$").Count() > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
 
         }
+
     }
 }
