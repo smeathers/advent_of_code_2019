@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 
-//https://adventofcode.com/2019/day/2
+// https://adventofcode.com/2019/day/2
+// Part 1 = 5098658
+// Part 2 = Noun:50 Verb:64
 
 namespace Day2
 {
@@ -20,6 +22,8 @@ namespace Day2
                         Console.WriteLine("Noun: " + noun + " Verb: " + verb + " Done");
                         Console.ReadKey();
                     }
+                    //else
+                    //    Console.WriteLine(output);
                 }
 
 
@@ -33,37 +37,44 @@ namespace Day2
 
             foreach(var line in lines)
             {
-                var positions = line.Split(',');
+                var addressSpace = line.Split(',');
 
                 // overide start values
                 //positions[1] = "12";
                 //positions[2] = "2";
-                positions[1] = noun;
-                positions[2] = verb;
+                addressSpace[1] = noun;
+                addressSpace[2] = verb;
 
 
 
-                for (int instructionPointer = 0; instructionPointer < positions.Length; instructionPointer += 4)
+                for (int instructionPointer = 0; instructionPointer < addressSpace.Length;)// instructionPointer += 4)
                 {
-                    int opcode = int.Parse(positions[instructionPointer]);
-                    int value1 = int.Parse(positions[int.Parse(positions[instructionPointer + 1])]);
-                    int value2 = int.Parse(positions[int.Parse(positions[instructionPointer + 2])]);
-                    int storeAddress = int.Parse(positions[instructionPointer + 3]);
+                    int opcode = int.Parse(addressSpace[instructionPointer]);
+                    //int value1 = int.Parse(addressSpace[int.Parse(addressSpace[instructionPointer + 1])]);
+                    //int value2 = int.Parse(addressSpace[int.Parse(addressSpace[instructionPointer + 2])]);
+                    //int storeAddress = int.Parse(addressSpace[instructionPointer + 3]);
+
+                    //Console.WriteLine(instructionPointer);
+
                     switch (opcode)
                     {
                         case 1:
                             //add
-                            positions[storeAddress] = (value1 + value2).ToString();
+                            addressSpace[int.Parse(addressSpace[instructionPointer + 3])] = (int.Parse(addressSpace[int.Parse(addressSpace[instructionPointer + 1])]) + int.Parse(addressSpace[int.Parse(addressSpace[instructionPointer + 2])])).ToString();
+                            instructionPointer += 4;
+                            //addressSpace[storeAddress] = (value1 + value2).ToString();
                             break;
                         case 2:
                             //multiply
-                            positions[storeAddress] = (value1 * value2).ToString();
+                            addressSpace[int.Parse(addressSpace[instructionPointer + 3])] = (int.Parse(addressSpace[int.Parse(addressSpace[instructionPointer + 1])]) * int.Parse(addressSpace[int.Parse(addressSpace[instructionPointer + 2])])).ToString();
+                            instructionPointer += 4;
+                            //addressSpace[storeAddress] = (value1 * value2).ToString();
                             break;
                         case 99:
                             //print and halt
-                            output = positions[0];
+                            output = addressSpace[0];
                             //Console.WriteLine(output);
-                            instructionPointer = positions.Length;
+                            instructionPointer = addressSpace.Length;
                             //if (output == "19690720")
                             //    Console.ReadKey();
                             break;
