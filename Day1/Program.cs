@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 
-//https://adventofcode.com/2019/day/1
+// https://adventofcode.com/2019/day/1
+// Part1 = 3394689
+// Part2 = 5089160
 
 namespace Day1
 {
@@ -11,8 +13,6 @@ namespace Day1
         {
             int FuelCount = 0;
             var lines = File.ReadLines("input.txt");
-
-            Console.WriteLine(CalculateFuel(2));
 
             foreach (var line in lines)
             {
@@ -28,7 +28,6 @@ namespace Day1
 
                 while (flag)
                 {
-                    Console.WriteLine("Beep!");
                     InterFuel = CalculateFuel(RequiredFuel);
                     if (InterFuel == 0)
                         flag = false;
