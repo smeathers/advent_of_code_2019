@@ -5,7 +5,7 @@ using System.IO;
 // Part 1 = 5098658
 // Part 2 = 5064
 
-namespace Day2
+namespace Day5
 {
     class Program
     {
@@ -69,7 +69,7 @@ namespace Day2
                             break;
                         case 3:
                             //save / input
-                            Console.WriteLine("intput: ");
+                            Console.Write("input: ");
                             register = int.Parse(Console.ReadLine());
                             memory[int.Parse(memory[instructionPointer + 1])] = register.ToString();
                             instructionPointer += 2;
